@@ -1,0 +1,7 @@
+api:
+ id: "16270543"
+ 
+tls.keystore:
+  type: "pkcs12"
+  path: "certs/check-in-papi-prod.p12"
+  alias: "server"
