@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	  xmlns="http://www.mulesoft.org/schema/mule/core"
+  xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+   <http:listener-config name="apiHttpListenerConfig">
+    <http:listener-connection
+      host="0.0.0.0"
+      port="${api.port}"
+      protocol="HTTPS"
+      tlsContext="tlsContext" />
+  </http:listener-config>
+  <apikit:config
+    name="apiConfig"
+    api="${api.spec}"
+    outboundHeadersMapName="outboundHeaders"
+    httpStatusVarName="httpStatus" />
+  <api-gateway:autodiscovery
+    apiId="${api.id}"
+    ignoreBasePath="true"
+    doc:name="API Autodiscovery"
+    doc:id="efdac170-1a1d-43b1-903b-4c516b678589"
+    flowRef="api-main" />
+  <tls:context
+    name="tlsContext"
+    doc:name="TLS Context"
+    doc:id="bbe9be3f-bb1c-44d2-8149-fa605313f3d6" >
+    <tls:key-store 
+        type="${tls.keystore.type}" 
+        path="${tls.keystore.path}" 
+        alias="${tls.keystore.alias}" 
+        keyPassword="${tls.keystore.keyPassword}" 
+        password="${tls.keystore.password}" />
+  </tls:context>
+  <configuration-properties doc:name="Configuration properties" doc:id="3906b9fe-2471-4851-9cbf-2413bd51ef74" file="properties-${env}.yaml" />
+  <configuration-properties doc:name="Configuration properties" doc:id="8a23c8a2-6fe7-4838-9123-d207d658dd35" file="properties.yaml" />
+  <global-property doc:name="Global Property" doc:id="0b7702eb-0c41-4682-81dc-e58a6515d1e7" name="env" value="dev" />
+  </mule>
